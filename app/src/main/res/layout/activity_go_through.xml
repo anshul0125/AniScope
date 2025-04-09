@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_1F222A"
-    tools:context=".GoThroughActivity">
+    tools:context=".view.GoThroughActivity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -27,13 +27,13 @@
             android:text="@string/welcome_to_aniscope"
             android:textColor="@color/white"
             android:textSize="32sp"
-            app:fontFamily="@font/roboto_bold"  />
+            app:fontFamily="@font/poppins_semibold" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="28dp"
-            android:fontFamily="@font/roboto_medium"
+            android:fontFamily="@font/poppins_medium"
             android:gravity="center"
             android:text="@string/all_your_favorite_anime_characters_and_trailers_in_one_fun_place"
             android:lineSpacingExtra="2dp"
@@ -50,7 +50,7 @@
             android:text="@string/get_started"
             android:textColor="@color/white"
             android:textSize="18sp"
-            android:fontFamily="@font/roboto_bold" />
+            app:fontFamily="@font/poppins_medium" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

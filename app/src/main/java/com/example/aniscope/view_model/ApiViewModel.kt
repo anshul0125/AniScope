@@ -11,8 +11,13 @@ import retrofit2.Response
 
 class ApiViewModel(val repository: Repository): ViewModel() {
 
+    var pageId = 1
+    var isLoading = false
+    var isLastPage = false
+
     fun getAnimeList(page: Int): LiveData<Response<AnimeListResponse>> {
         return MutableLiveData<Response<AnimeListResponse>>().apply {
+            isLoading = true
             viewModelScope.launch {
                 postValue(repository.getAnimeList(page))
             }

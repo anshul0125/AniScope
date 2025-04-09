@@ -1,0 +1,49 @@
+package com.example.aniscope.view.adapter
+
+import android.annotation.SuppressLint
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.aniscope.R
+import com.example.aniscope.databinding.ItemAnimeListBinding
+import com.example.aniscope.model.AnimeData
+
+class AnimeListAdapter(
+    val list: ArrayList<AnimeData>
+): RecyclerView.Adapter<AnimeListAdapter.AnimeListViewHolder>() {
+
+    inner class AnimeListViewHolder(val binding: ItemAnimeListBinding): RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: AnimeData) {
+            binding.root.context.let { context ->
+                binding.apply {
+                    tvTitle.text = data.title
+                    tvRating.text = data.score.toString()
+                    tvGenre.text = "Genres: ".plus(data.genres?.joinToString { it.name.orEmpty() } )
+                    tvEpisodes.text = context.getString(R.string.episodes).plus(data.episodes.toString())
+                    Glide.with(context)
+                        .load(data.images?.jpg?.imageUrl.orEmpty())
+                        .into(ivAnimeImage)
+                }
+            }
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnimeListViewHolder {
+        val _binding = ItemAnimeListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return AnimeListViewHolder(_binding)
+    }
+
+    override fun getItemCount() = list.size
+
+    override fun onBindViewHolder(holder: AnimeListViewHolder, position: Int) {
+        holder.bind(list[position])
+    }
+
+    fun updateList(newList: List<AnimeData>) {
+        list.addAll(newList)
+        notifyDataSetChanged()
+    }
+
+}

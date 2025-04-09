@@ -3,4 +3,5 @@
     <string name="welcome_to_aniscope">Welcome to AniScope</string>
     <string name="get_started">Get Started</string>
     <string name="all_your_favorite_anime_characters_and_trailers_in_one_fun_place">All your favorite anime, characters, and trailers in one fun place!</string>
+    <string name="episodes">"Episodes "</string>
 </resources>

@@ -4,125 +4,125 @@ import com.google.gson.annotations.SerializedName
 
 data class AnimeListResponse(
     @SerializedName("data")
-    val animeList: List<AnimeData>,
+    val animeList: List<AnimeData>? = null,
     @SerializedName("pagination")
-    val pagination: Pagination
+    val pagination: Pagination? = null
 )
 
 data class AnimeData(
     @SerializedName("mal_id")
-    val id: Int,
+    val id: Int? = null,
     @SerializedName("background")
-    val background: String,
+    val background: String? = null,
     @SerializedName("duration")
-    val duration: String,
+    val duration: String? = null,
     @SerializedName("episodes")
-    val episodes: Int,
+    val episodes: Int? = null,
     @SerializedName("genres")
-    val genres: List<Genre>,
+    val genres: List<Genre>? = null,
     @SerializedName("images")
-    val images: Images,
+    val images: Images? = null,
     @SerializedName("rank")
-    val rank: Int,
+    val rank: Int? = null,
     @SerializedName("rating")
-    val rating: String,
+    val rating: String? = null,
     @SerializedName("score")
-    val score: Double,
+    val score: Double? = null,
     @SerializedName("scored_by")
-    val scoredBy: Int,
+    val scoredBy: Int? = null,
     @SerializedName("season")
-    val season: String,
+    val season: String? = null,
     @SerializedName("source")
-    val source: String,
+    val source: String? = null,
     @SerializedName("status")
-    val status: String,
+    val status: String? = null,
     @SerializedName("synopsis")
-    val synopsis: String,
+    val synopsis: String? = null,
     @SerializedName("title")
-    val title: String,
+    val title: String? = null,
     @SerializedName("title_english")
-    val titleEnglish: String,
+    val titleEnglish: String? = null,
     @SerializedName("title_japanese")
-    val titleJapanese: String,
+    val titleJapanese: String? = null,
     @SerializedName("title_synonyms")
-    val titleSynonyms: List<String>,
+    val titleSynonyms: List<String>? = null,
     @SerializedName("titles")
-    val titles: List<Title>,
+    val titles: List<Title>? = null,
     @SerializedName("trailer")
-    val trailer: Trailer,
+    val trailer: Trailer? = null,
     @SerializedName("type")
-    val type: String,
+    val type: String? = null,
     @SerializedName("url")
-    val url: String,
+    val url: String? = null,
     @SerializedName("year")
-    val year: Int
+    val year: Int? = null
 )
 
 data class Pagination(
     @SerializedName("current_page")
-    val currentPage: Int,
+    val currentPage: Int? = null,
     @SerializedName("has_next_page")
-    val hasNextPage: Boolean,
+    val hasNextPage: Boolean? = null,
     @SerializedName("items")
-    val items: Items,
+    val items: Items? = null,
     @SerializedName("last_visible_page")
-    val lastVisiblePage: Int
+    val lastVisiblePage: Int? = null
 )
 
 data class Items(
     @SerializedName("count")
-    val count: Int,
+    val count: Int? = null,
     @SerializedName("per_page")
-    val perPage: Int,
+    val perPage: Int? = null,
     @SerializedName("total")
-    val total: Int
+    val total: Int? = null
 )
 
 data class Genre(
     @SerializedName("mal_id")
-    val id: Int,
+    val id: Int? = null,
     @SerializedName("name")
-    val name: String,
+    val name: String? = null,
     @SerializedName("type")
-    val type: String,
+    val type: String? = null,
     @SerializedName("url")
-    val url: String
+    val url: String? = null
 )
 
 data class Trailer(
     @SerializedName("embed_url")
-    val embedUrl: String,
+    val embedUrl: String? = null,
     @SerializedName("images")
-    val images: Image,
+    val images: Image? = null,
     @SerializedName("url")
-    val url: String,
+    val url: String? = null,
     @SerializedName("youtube_id")
-    val youtubeId: String
+    val youtubeId: String? = null
 )
 
 data class Images(
     @SerializedName("jpg")
-    val jpg: Image,
+    val jpg: Image? = null,
     @SerializedName("webp")
-    val webp: Image
+    val webp: Image? = null
 )
 
 data class Image(
     @SerializedName("image_url")
-    val imageUrl: String,
+    val imageUrl: String? = null,
     @SerializedName("large_image_url")
-    val largeImageUrl: String,
+    val largeImageUrl: String? = null,
     @SerializedName("maximum_image_url")
-    val maximumImageUrl: String,
+    val maximumImageUrl: String? = null,
     @SerializedName("medium_image_url")
-    val mediumImageUrl: String,
+    val mediumImageUrl: String? = null,
     @SerializedName("small_image_url")
-    val smallImageUrl: String
+    val smallImageUrl: String? = null
 )
 
 data class Title(
     @SerializedName("title")
-    val title: String,
+    val title: String? = null,
     @SerializedName("type")
-    val type: String
+    val type: String? = null
 )
