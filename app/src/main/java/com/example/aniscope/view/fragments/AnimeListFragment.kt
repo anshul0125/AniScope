@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.aniscope.base.PaginationListenerLinear
@@ -40,7 +41,16 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observer()
+        initUi()
         getAnimeList()
+    }
+
+    private fun initUi() {
+        binding.swipeToRefresh.setOnRefreshListener{
+            viewModel.pageId = 1
+            binding.rvAnime.adapter = null
+            getAnimeList()
+        }
     }
 
     private fun observer() {
@@ -57,9 +67,12 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
             binding.rvAnime.adapter = AnimeListAdapter(list = updatedList as ArrayList, this)
             binding.rvAnime.addOnScrollListener(object: PaginationListenerLinear(
                 layoutManager = binding.rvAnime.layoutManager as LinearLayoutManager,
-                pageSize = 1
+                pageSize = 2
             ) {
-                override fun loadMoreItems() = getAnimeList()
+                override fun loadMoreItems() {
+                    binding.swipeToRefresh.isRefreshing = true
+                    getAnimeList()
+                }
                 override val isLastPage = viewModel.isLastPage
                 override val isLoading = viewModel.isLoading
             })
@@ -71,8 +84,13 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
             if (it.isSuccessful && it.body() != null && it.code() == 200) {
                 viewModel.isLoading = false
                 viewModel.isLastPage = it.body()?.pagination == null || it.body()?.pagination?.hasNextPage == false
+                binding.swipeToRefresh.isRefreshing = false
                 binding.shimmerLayout.visibility = View.GONE
                 sharedViewModel.setAnimeList(it.body()?.animeList.orEmpty())
+            } else if (!it.isSuccessful || it.body() == null) {
+                viewModel.isLoading = false
+                binding.swipeToRefresh.isRefreshing = false
+                Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -80,6 +98,11 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
     override fun onAnimeClicked(animeData: AnimeData) {
         val anime = AnimeDetailsBottomSheetFragment.newInstance(animeData)
         anime.show(childFragmentManager, AnimeDetailsBottomSheetFragment::class.java.simpleName)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null // Clear binding
     }
 
     companion object {

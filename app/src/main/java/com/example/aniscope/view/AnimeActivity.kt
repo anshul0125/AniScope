@@ -38,5 +38,10 @@ class AnimeActivity : AppCompatActivity() {
             finish()
         }
     }
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null // Clear binding
+    }
+
 
 }

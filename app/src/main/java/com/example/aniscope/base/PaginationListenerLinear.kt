@@ -19,7 +19,7 @@ abstract class PaginationListenerLinear(
         Log.e("PaginationListenerGrid", "onScrolled, lastVisibleItemPosition = $lastVisibleItemPosition")
         Log.e("PaginationListenerGrid", "onScrolled, (lastVisibleItemPosition + pageSize) = ${(lastVisibleItemPosition + pageSize)}")
 
-        if (!isLoading && totalItemCount <= (lastVisibleItemPosition + pageSize)) {
+        if (!isLoading && totalItemCount - pageSize == lastVisibleItemPosition) {
             loadMoreItems()
         }
     }
