@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
 interface ApiInterface {
 
-    @GET("v4/anime")
+    @GET("v4/top/anime")
     suspend fun getAnimeList(
         @Query("page") page: Int
     ): Response<AnimeListResponse>

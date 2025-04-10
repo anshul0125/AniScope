@@ -48,7 +48,7 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
     private fun initUi() {
         binding.swipeToRefresh.setOnRefreshListener{
             viewModel.pageId = 1
-            binding.rvAnime.adapter = null
+            (binding.rvAnime.adapter as? AnimeListAdapter)?.resetList()
             getAnimeList()
         }
     }

@@ -42,8 +42,15 @@ class AnimeListAdapter(
     }
 
     fun updateList(newList: List<AnimeData>) {
+        val initialListSize = list.size
         list.addAll(newList)
-        notifyDataSetChanged()
+        notifyItemRangeInserted(initialListSize, newList.size)
+    }
+
+    fun resetList() {
+        val initialListSize = list.size
+        list.clear()
+        notifyItemRangeRemoved(0, initialListSize)
     }
 
     interface AnimeListCallback {
