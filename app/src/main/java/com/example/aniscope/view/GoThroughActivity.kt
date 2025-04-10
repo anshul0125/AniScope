@@ -19,6 +19,5 @@ class GoThroughActivity : AppCompatActivity() {
             val intent = Intent(this, AnimeActivity::class.java)
             startActivity(intent)
         }
-
     }
 }

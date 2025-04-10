@@ -1,8 +1,11 @@
 package com.example.aniscope.view.fragments
 
+import android.content.DialogInterface
 import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -54,8 +57,12 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observer()
         animeData?.let { setAnimeDetails(data = it) }
+        initUi()
+    }
+
+    private fun initUi() {
+        binding.ivCross.setOnClickListener { dismiss() }
     }
 
     override fun onStart() {
@@ -65,23 +72,15 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
 
         bottomSheet?.let {
             val behavior = BottomSheetBehavior.from(it)
-
             // Set height to 80% of screen
             val windowHeight = Resources.getSystem().displayMetrics.heightPixels
-            val desiredHeight = (windowHeight * 0.95).toInt()
-
+            val desiredHeight = (windowHeight).toInt()
             it.layoutParams.height = desiredHeight
             it.requestLayout()
+            behavior.skipCollapsed = true
+            behavior.isHideable = true
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
-    }
-
-    private fun observer() {
-//        sharedViewModel.selectedAnime.observe(viewLifecycleOwner){
-//            if(it != null) {
-//                setAnimeDetails(data = it)
-//            }
-//        }
     }
 
     private fun setAnimeDetails(data: AnimeData) {
@@ -134,23 +133,29 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
             }
 
             trailer?.youtubeId?.let { youtubeId ->
-                binding.ypAnimeTrailer.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-                    override fun onReady(youTubePlayer: YouTubePlayer) {
-                        youTubePlayer.cueVideo(youtubeId, 0f)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    if (isAdded && _binding != null) {
+                        binding.ypAnimeTrailer.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                            override fun onReady(youTubePlayer: YouTubePlayer) {
+                                youTubePlayer.cueVideo(youtubeId, 0f)
+                            }
+                            override fun onError(
+                                youTubePlayer: YouTubePlayer,
+                                error: PlayerConstants.PlayerError
+                            ) {
+                                Log.e("AnimeDetails", "YouTube Player Error: $error")
+                                if (isAdded && _binding != null) {
+                                    binding.ypAnimeTrailer.visibility = View.GONE
+                                    images?.jpg?.largeImageUrl?.let {
+                                        binding.ivAnimeImage.visibility = View.VISIBLE
+                                        Glide.with(requireContext()).load(it).into(binding.ivAnimeImage)
+                                    }
+                                }
+                            }
+                        })
                     }
-                    override fun onError(
-                        youTubePlayer: YouTubePlayer,
-                        error: PlayerConstants.PlayerError
-                    ) {
-                        Log.e(TAG, "onError: $error", )
-                        binding.ypAnimeTrailer.visibility = View.GONE
-                        images?.jpg?.largeImageUrl?.let {
-                            binding.ivAnimeImage.visibility = View.VISIBLE
-                            Glide.with(requireContext()).load(it).into(binding.ivAnimeImage)
-                        }
-                    }
-                })
-            } ?: kotlin.run {
+                }, 100) // 100ms delay
+            } ?: run {
                 binding.ypAnimeTrailer.visibility = View.GONE
                 images?.jpg?.largeImageUrl?.let {
                     binding.ivAnimeImage.visibility = View.VISIBLE
@@ -172,6 +177,17 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
                 }
             }
         )
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.ypAnimeTrailer.release() // Release the player
+        _binding = null // Clear binding
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        binding.ypAnimeTrailer.release() // Extra release on dismiss
     }
 
     companion object {

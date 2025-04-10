@@ -45,6 +45,7 @@
             android:layout_height="wrap_content"
             android:padding="6dp"
             android:src="@drawable/ic_bookmark_unfilled"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
