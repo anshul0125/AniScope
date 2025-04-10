@@ -87,7 +87,7 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
                 binding.swipeToRefresh.isRefreshing = false
                 binding.shimmerLayout.visibility = View.GONE
                 sharedViewModel.setAnimeList(it.body()?.animeList.orEmpty())
-            } else if (!it.isSuccessful || it.body() == null) {
+            } else if (!it.isSuccessful) {
                 viewModel.isLoading = false
                 binding.swipeToRefresh.isRefreshing = false
                 Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()

@@ -1,6 +1,5 @@
 package com.example.aniscope.view.fragments
 
-import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.res.Resources
 import android.os.Build
@@ -19,6 +18,7 @@ import com.example.aniscope.model.AnimeData
 import com.example.aniscope.view.adapter.AnimeListAdapter
 import com.example.aniscope.view.adapter.MoreLikeThisAnimeAdapter
 import com.example.aniscope.view_model.SharedViewModel
+import com.google.android.material.R.id.design_bottom_sheet
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -69,14 +69,12 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onStart() {
         super.onStart()
         val dialog = dialog as? BottomSheetDialog
-        val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        val bottomSheet = dialog?.findViewById<View>(design_bottom_sheet)
 
         bottomSheet?.let {
             val behavior = BottomSheetBehavior.from(it)
-            // Set height to 80% of screen
             val windowHeight = Resources.getSystem().displayMetrics.heightPixels
-            val desiredHeight = (windowHeight).toInt()
-            it.layoutParams.height = desiredHeight
+            it.layoutParams.height = windowHeight
             it.requestLayout()
             behavior.skipCollapsed = true
             behavior.isHideable = true
@@ -135,26 +133,7 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
 
             trailer?.youtubeId?.let { youtubeId ->
                 Handler(Looper.getMainLooper()).postDelayed({
-                    if (isAdded && _binding != null) {
-                        binding.ypAnimeTrailer.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-                            override fun onReady(youTubePlayer: YouTubePlayer) {
-                                youTubePlayer.cueVideo(youtubeId, 0f)
-                            }
-                            override fun onError(
-                                youTubePlayer: YouTubePlayer,
-                                error: PlayerConstants.PlayerError
-                            ) {
-                                Log.e("AnimeDetails", "YouTube Player Error: $error")
-                                if (isAdded && _binding != null) {
-                                    binding.ypAnimeTrailer.visibility = View.GONE
-                                    images?.jpg?.largeImageUrl?.let {
-                                        binding.ivAnimeImage.visibility = View.VISIBLE
-                                        Glide.with(requireContext()).load(it).into(binding.ivAnimeImage)
-                                    }
-                                }
-                            }
-                        })
-                    }
+                    if (isAdded && _binding != null) binding.ypAnimeTrailer.addYouTubePlayerListener(setYoutubePlayer())
                 }, 100) // 100ms delay
             } ?: run {
                 binding.ypAnimeTrailer.visibility = View.GONE
@@ -179,6 +158,28 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
             }
         )
     }
+
+    private fun AnimeData.setYoutubePlayer() =
+        object : AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                Log.e(TAG, "YouTube Player Ready", )
+                youTubePlayer.cueVideo(trailer?.youtubeId.orEmpty(), 0f)
+            }
+
+            override fun onError(
+                youTubePlayer: YouTubePlayer,
+                error: PlayerConstants.PlayerError
+            ) {
+                Log.e(TAG, "YouTube Player Error: $error")
+                if (isAdded && _binding != null) {
+                    binding.ypAnimeTrailer.visibility = View.GONE
+                    images?.jpg?.largeImageUrl?.let {
+                        binding.ivAnimeImage.visibility = View.VISIBLE
+                        Glide.with(requireContext()).load(it).into(binding.ivAnimeImage)
+                    }
+                }
+            }
+        }
 
     override fun onDestroyView() {
         super.onDestroyView()
