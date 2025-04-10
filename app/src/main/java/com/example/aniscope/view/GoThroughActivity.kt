@@ -2,13 +2,8 @@ package com.example.aniscope.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.aniscope.databinding.ActivityGoThroughBinding
-import com.example.aniscope.network.Repository
-import com.example.aniscope.view_model.ApiViewModel
-import com.example.aniscope.view_model.ApiViewModelFactory
 
 class GoThroughActivity : AppCompatActivity() {
 
@@ -21,7 +16,7 @@ class GoThroughActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.tvGetStartedButton.setOnClickListener {
-            val intent = Intent(this, AnimeListActivity::class.java)
+            val intent = Intent(this, AnimeActivity::class.java)
             startActivity(intent)
         }
 

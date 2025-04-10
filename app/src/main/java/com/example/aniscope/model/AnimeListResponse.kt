@@ -1,13 +1,14 @@
 package com.example.aniscope.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class AnimeListResponse(
     @SerializedName("data")
     val animeList: List<AnimeData>? = null,
     @SerializedName("pagination")
     val pagination: Pagination? = null
-)
+): Serializable
 
 data class AnimeData(
     @SerializedName("mal_id")
@@ -20,6 +21,8 @@ data class AnimeData(
     val episodes: Int? = null,
     @SerializedName("genres")
     val genres: List<Genre>? = null,
+    @SerializedName("producers")
+    val producers: List<Genre>? = null,
     @SerializedName("images")
     val images: Images? = null,
     @SerializedName("rank")
@@ -56,7 +59,7 @@ data class AnimeData(
     val url: String? = null,
     @SerializedName("year")
     val year: Int? = null
-)
+): Serializable
 
 data class Pagination(
     @SerializedName("current_page")
@@ -67,7 +70,7 @@ data class Pagination(
     val items: Items? = null,
     @SerializedName("last_visible_page")
     val lastVisiblePage: Int? = null
-)
+): Serializable
 
 data class Items(
     @SerializedName("count")
@@ -76,7 +79,7 @@ data class Items(
     val perPage: Int? = null,
     @SerializedName("total")
     val total: Int? = null
-)
+): Serializable
 
 data class Genre(
     @SerializedName("mal_id")
@@ -87,7 +90,7 @@ data class Genre(
     val type: String? = null,
     @SerializedName("url")
     val url: String? = null
-)
+): Serializable
 
 data class Trailer(
     @SerializedName("embed_url")
@@ -98,14 +101,14 @@ data class Trailer(
     val url: String? = null,
     @SerializedName("youtube_id")
     val youtubeId: String? = null
-)
+): Serializable
 
 data class Images(
     @SerializedName("jpg")
     val jpg: Image? = null,
     @SerializedName("webp")
     val webp: Image? = null
-)
+): Serializable
 
 data class Image(
     @SerializedName("image_url")
@@ -118,11 +121,11 @@ data class Image(
     val mediumImageUrl: String? = null,
     @SerializedName("small_image_url")
     val smallImageUrl: String? = null
-)
+): Serializable
 
 data class Title(
     @SerializedName("title")
     val title: String? = null,
     @SerializedName("type")
     val type: String? = null
-)
+): Serializable

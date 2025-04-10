@@ -49,6 +49,8 @@ dependencies {
     implementation(libs.bundles.retrofit)
     implementation(libs.androidx.lifecycle.viewmodel.ktx )
     implementation(libs.glide)
+    implementation(libs.androidYoutubePlayer)
+    implementation(libs.fbShimmer)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

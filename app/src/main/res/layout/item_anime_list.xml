@@ -35,7 +35,8 @@
             android:fontFamily="@font/poppins_semibold"
             android:gravity="center"
             android:paddingHorizontal="8dp"
-            android:paddingVertical="4dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="4dp"
             android:textColor="@color/white"
             android:textSize="10sp"
             tools:text="9.0" />

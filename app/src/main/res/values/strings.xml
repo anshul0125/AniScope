@@ -4,4 +4,7 @@
     <string name="get_started">Get Started</string>
     <string name="all_your_favorite_anime_characters_and_trailers_in_one_fun_place">All your favorite anime, characters, and trailers in one fun place!</string>
     <string name="episodes">"Episodes "</string>
+    <string name="genres_with_collon">"Genres: "</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

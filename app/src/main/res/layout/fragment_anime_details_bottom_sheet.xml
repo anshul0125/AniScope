@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_1F222A"
+    android:orientation="vertical"
+    tools:context=".view.fragments.AnimeDetailsBottomSheetFragment">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="250dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivAnimeImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:foreground="@drawable/bg_rect_gradient"
+            android:scaleType="fitXY"
+            android:visibility="gone" />
+
+        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+            android:id="@+id/ypAnimeTrailer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:autoPlay="false"
+            app:color="@color/color_1F222A" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            tools:text="Sousou no Frieren" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:gravity="center_vertical"
+                android:paddingTop="3dp"
+                android:textColor="@color/color_green"
+                android:textSize="14sp"
+                tools:text="9.2 " />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivArrow"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/ic_arrow_right"
+                android:backgroundTint="@color/color_green" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="center_vertical"
+                android:paddingTop="3dp"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                tools:text="2022" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvEpisodes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:fontFamily="@font/poppins_medium"
+            tools:text="Episodes - 8" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvGenre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            tools:text="Genre: Adventure, Comedy, Drama, Fantasy, Romance" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins"
+            android:maxLines="4"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            tools:text="During their decade-long quest to defeat the Demon King, the members of the hero's party—Himmel himself, the priest Heiter, the dwarf warrior Eisen, and the elven mage Frieren—forge bonds through adventures and battles, creating unforgettable precious memories for most of them." />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvProducers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins"
+            android:maxLines="2"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            tools:text="Producers: Aniplex, Dentsu, Shogakukan-Shueisha Productions, Nippon Television Network, TOHO animation" />
+
+
+        <!--        <androidx.appcompat.widget.AppCompatTextView-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:gravity="center"-->
+        <!--            android:layout_gravity="center_horizontal"-->
+        <!--            android:paddingVertical="10dp"-->
+        <!--            android:paddingHorizontal="36dp"-->
+        <!--            android:layout_marginTop="28dp"-->
+        <!--            android:text="My List"-->
+        <!--            android:textColor="@color/white"-->
+        <!--            android:textSize="16sp"-->
+        <!--            android:fontFamily="@font/poppins_medium"-->
+        <!--            android:drawablePadding="4dp"-->
+        <!--            android:background="@drawable/bg_rect_round_all_corner_green"-->
+        <!--            app:drawableStartCompat="@drawable/ic_bookmark_unfilled" />-->
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvMoreLikeThese"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:text="More Like This -" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMoreLikeThese"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
