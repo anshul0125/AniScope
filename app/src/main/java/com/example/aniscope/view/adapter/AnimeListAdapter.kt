@@ -20,7 +20,7 @@ class AnimeListAdapter(
                     root.setOnClickListener { listener.onAnimeClicked(data) }
                     tvTitle.text = data.title
                     tvRating.text = data.score.toString()
-                    tvGenre.text = context.getString(R.string.genres_with_collon).plus(data.genres?.joinToString { it.name.orEmpty() } )
+                    tvGenre.text = context.getString(R.string.genres_with_colon).plus(data.genres?.joinToString { it.name.orEmpty() } )
                     tvEpisodes.text = context.getString(R.string.episodes).plus(data.episodes.toString())
                     Glide.with(context)
                         .load(data.images?.jpg?.imageUrl.orEmpty())

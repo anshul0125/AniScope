@@ -1,5 +1,6 @@
 package com.example.aniscope.view.fragments
 
+import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.res.Resources
 import android.os.Build
@@ -93,7 +94,7 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
             }
 
             score?.let { score ->
-                binding.tvRating.text = "Rated: ".plus(score.toString())
+                binding.tvRating.text = getString(R.string.rated_with_collon).plus(score.toString())
             } ?: kotlin.run {
                 binding.ivArrow.visibility = View.GONE
                 binding.tvRating.visibility = View.GONE
@@ -107,13 +108,13 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
             }
 
             episodes?.let { episodes ->
-                binding.tvEpisodes.text = "Episodes: $episodes"
+                binding.tvEpisodes.text = getString(R.string.episodes_with_collon, episodes.toString())
             } ?: kotlin.run {
                 binding.tvEpisodes.visibility = View.GONE
             }
 
             genres?.let { genres ->
-                binding.tvGenre.text = context?.getString(R.string.genres_with_collon).plus(data.genres?.joinToString { it.name.orEmpty() } )
+                binding.tvGenre.text = context?.getString(R.string.genres_with_colon).plus(genres.joinToString { it.name.orEmpty() } )
             } ?: kotlin.run {
                 binding.tvGenre.visibility = View.GONE
             }
@@ -128,7 +129,7 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
                 if(producersComaSeparated.isEmpty()) {
                     binding.tvProducers.visibility = View.GONE
                 } else {
-                    binding.tvProducers.text = "Producers: ".plus(producersComaSeparated)
+                    binding.tvProducers.text = getString(R.string.producers_with_colon).plus(producersComaSeparated)
                 }
             }
 
