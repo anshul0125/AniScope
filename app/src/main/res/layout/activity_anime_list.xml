@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_1F222A"
     tools:context=".view.AnimeActivity">
 
@@ -11,44 +11,53 @@
         android:id="@+id/clToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="12dp"
         android:paddingHorizontal="12dp"
+        android:paddingVertical="12dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivBackPress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_back_button"
             android:padding="6dp"
+            android:src="@drawable/ic_back_button"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="Anime List"
-            android:textColor="@color/white"
             android:layout_marginHorizontal="10dp"
             android:fontFamily="@font/poppins_semibold"
             android:gravity="start|center_vertical"
+            android:text="Anime List"
+            android:textColor="@color/white"
             android:textSize="20dp"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvBookmark"
             app:layout_constraintStart_toEndOf="@id/ivBackPress"
-            app:layout_constraintEnd_toStartOf="@id/ivBookmark"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivBookmark"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvBookmark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="6dp"
-            android:src="@drawable/ic_bookmark_unfilled"
-            android:visibility="gone"
+            android:drawablePadding="4dp"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="start|center_vertical"
+            android:text="@string/saved_animes"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:visibility="visible"
+            android:paddingHorizontal="18dp"
+            android:paddingVertical="8dp"
+            android:background="@drawable/bg_curved_stroke"
+            app:drawableStartCompat="@drawable/ic_bookmark_unfilled"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -56,7 +65,7 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/clToolbar"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clToolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

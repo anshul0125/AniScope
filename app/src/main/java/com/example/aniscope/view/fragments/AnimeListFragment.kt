@@ -15,6 +15,7 @@ import com.example.aniscope.network.Repository
 import com.example.aniscope.view.adapter.AnimeListAdapter
 import com.example.aniscope.view_model.ApiViewModel
 import com.example.aniscope.view_model.ApiViewModelFactory
+import com.example.aniscope.view_model.DatabaseViewModel
 import com.example.aniscope.view_model.SharedViewModel
 
 class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
@@ -22,8 +23,16 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
     var _binding: FragmentAnimeListBinding? = null
     val binding get() = _binding!!
 
+    private val bookmarkList: ArrayList<AnimeData> = ArrayList()
+    private var paginationListener: PaginationListenerLinear? = null
+    private var currentAnimeList: MutableList<AnimeData> = mutableListOf()
+
     private val viewModel by lazy {
         ViewModelProvider(this, ApiViewModelFactory(Repository()))[ApiViewModel::class.java]
+    }
+
+    private val dbViewModel by lazy {
+        ViewModelProvider(requireActivity())[DatabaseViewModel::class.java]
     }
 
     private val sharedViewModel by lazy {
@@ -40,8 +49,8 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observer()
         initUi()
+        observer()
         getAnimeList()
     }
 
@@ -51,11 +60,47 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
             (binding.rvAnime.adapter as? AnimeListAdapter)?.resetList()
             getAnimeList()
         }
+        paginationListener = object: PaginationListenerLinear(
+            layoutManager = binding.rvAnime.layoutManager as LinearLayoutManager,
+            pageSize = 2
+        ) {
+            override fun loadMoreItems() {
+                binding.swipeToRefresh.isRefreshing = true
+                getAnimeList()
+            }
+            override val isLastPage = viewModel.isLastPage
+            override val isLoading = viewModel.isLoading
+        }
     }
 
     private fun observer() {
+        dbViewModel.daoObject?.getBookmarkedList()?.observe(viewLifecycleOwner) {
+            bookmarkList.clear()
+            bookmarkList.addAll(it)
+            if (sharedViewModel.showBookmarkList.value == true) {
+                (binding.rvAnime.adapter as? AnimeListAdapter)?.resetListAndUpdateList(bookmarkList)
+            }
+        }
         sharedViewModel.animeList.observe(viewLifecycleOwner) {
-            updateAnimeList(updatedList = it)
+            if (sharedViewModel.showBookmarkList.value == false) {
+                updateAnimeList(updatedList = it)
+            } else {
+                currentAnimeList.addAll(it)
+            }
+        }
+        sharedViewModel.showBookmarkList.observe(viewLifecycleOwner){ showBookmarkList ->
+            if(showBookmarkList) {
+                binding.swipeToRefresh.isEnabled = false
+                binding.rvAnime.clearOnScrollListeners()
+                (binding.rvAnime.adapter as? AnimeListAdapter)?.apply {
+                    currentAnimeList = list.toMutableList()
+                    resetListAndUpdateList(bookmarkList)
+                }
+            } else {
+                binding.swipeToRefresh.isEnabled = true
+                paginationListener?.let { binding.rvAnime.addOnScrollListener(it) }
+                (binding.rvAnime.adapter as? AnimeListAdapter)?.apply { resetListAndUpdateList(currentAnimeList) }
+            }
         }
     }
 
@@ -64,18 +109,8 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
         if(binding.rvAnime.adapter is AnimeListAdapter) {
             (binding.rvAnime.adapter as AnimeListAdapter).updateList(newList = updatedList)
         } else {
-            binding.rvAnime.adapter = AnimeListAdapter(list = updatedList as ArrayList, this)
-            binding.rvAnime.addOnScrollListener(object: PaginationListenerLinear(
-                layoutManager = binding.rvAnime.layoutManager as LinearLayoutManager,
-                pageSize = 2
-            ) {
-                override fun loadMoreItems() {
-                    binding.swipeToRefresh.isRefreshing = true
-                    getAnimeList()
-                }
-                override val isLastPage = viewModel.isLastPage
-                override val isLoading = viewModel.isLoading
-            })
+            binding.rvAnime.adapter = AnimeListAdapter(list = (updatedList as? ArrayList) ?: arrayListOf(), this)
+            paginationListener?.let { binding.rvAnime.addOnScrollListener(it) }
         }
     }
 

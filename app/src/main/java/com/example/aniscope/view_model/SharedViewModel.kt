@@ -13,12 +13,19 @@ class SharedViewModel: ViewModel() {
     private val _selectedAnime = MutableLiveData<AnimeData>()
     val selectedAnime: LiveData<AnimeData> = _selectedAnime
 
+    private val _showBookmarkList = MutableLiveData(false)
+    val showBookmarkList: LiveData<Boolean> = _showBookmarkList
+
     fun setAnimeList(list: List<AnimeData>) {
         _animeList.postValue(list)
     }
 
     fun setAnime(animeData: AnimeData) {
         _selectedAnime.postValue(animeData)
+    }
+
+    fun showBookmarkList(showBookmarkList: Boolean) {
+        _showBookmarkList.postValue(showBookmarkList)
     }
 
 }

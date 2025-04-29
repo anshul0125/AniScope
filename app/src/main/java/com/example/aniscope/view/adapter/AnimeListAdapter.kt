@@ -53,6 +53,14 @@ class AnimeListAdapter(
         notifyItemRangeRemoved(0, initialListSize)
     }
 
+    fun resetListAndUpdateList(updatedList: List<AnimeData>) {
+        val initialListSize = list.size
+        list.clear()
+        notifyItemRangeRemoved(0, initialListSize)
+        list.addAll(updatedList)
+        notifyItemRangeInserted(0, updatedList.size)
+    }
+
     interface AnimeListCallback {
         fun onAnimeClicked(animeData: AnimeData)
     }
