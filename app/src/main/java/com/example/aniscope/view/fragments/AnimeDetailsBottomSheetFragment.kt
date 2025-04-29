@@ -1,5 +1,6 @@
 package com.example.aniscope.view.fragments
 
+import android.content.Context
 import android.content.DialogInterface
 import android.content.res.Resources
 import android.os.Build
@@ -10,6 +11,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.aniscope.R
@@ -17,6 +20,7 @@ import com.example.aniscope.databinding.FragmentAnimeDetailsBottomSheetBinding
 import com.example.aniscope.model.AnimeData
 import com.example.aniscope.view.adapter.AnimeListAdapter
 import com.example.aniscope.view.adapter.MoreLikeThisAnimeAdapter
+import com.example.aniscope.view_model.DatabaseViewModel
 import com.example.aniscope.view_model.SharedViewModel
 import com.google.android.material.R.id.design_bottom_sheet
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -31,10 +35,15 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentAnimeDetailsBottomSheetBinding? = null
     private val binding get() = _binding!!
     private var animeData: AnimeData? = null
+    val bookmarkList = ArrayList<AnimeData>()
     private val TAG = this.javaClass.simpleName
 
     private val sharedViewModel by lazy {
         ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+    }
+
+    private val viewModel by lazy {
+        ViewModelProvider(requireActivity())[DatabaseViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,8 +67,25 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        animeData?.let { setAnimeDetails(data = it) }
         initUi()
+        observer()
+        animeData?.let { setAnimeDetails(data = it) }
+    }
+
+    private fun observer() {
+        viewModel.daoObject?.getBookmarkedList()?.observe(viewLifecycleOwner){
+            bookmarkList.clear()
+            bookmarkList.addAll(it)
+            setBookmarkUi()
+        }
+    }
+
+    private fun setBookmarkUi() {
+        if(bookmarkList.find { it.id == animeData?.id } != null){
+            setBookmarkDrawable(isFilled = true)
+        } else {
+            setBookmarkDrawable(isFilled = false)
+        }
     }
 
     private fun initUi() {
@@ -84,6 +110,13 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun setAnimeDetails(data: AnimeData) {
         data.apply {
+            binding.ivBookmark.setOnClickListener {
+                if(bookmarkList.find { bookmark -> bookmark.id == animeData?.id } != null){
+                    deleteBookmark()
+                } else {
+                    addToBookmark()
+                }
+            }
 
             title?.let { title ->
                 binding.tvTitle.text = title
@@ -146,6 +179,18 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
         }
     }
 
+    private fun setBookmarkDrawable(isFilled: Boolean) {
+        if(isFilled){
+            binding.ivBookmark.setImageDrawable(
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_bookmark_filled)
+            )
+        } else {
+            binding.ivBookmark.setImageDrawable(
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_bookmark_unfilled)
+            )
+        }
+    }
+
     private fun addMoreLikeThis() {
         val shuffledList = sharedViewModel.animeList.value?.shuffled()?.take(5)
         binding.rvMoreLikeThese.adapter = MoreLikeThisAnimeAdapter(
@@ -157,6 +202,23 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
                 }
             }
         )
+    }
+
+    private fun AnimeData.deleteBookmark() {
+        id?.let { id ->
+            viewModel.deleteBookmark(id)
+            requireContext().showToast("Removed bookmark")
+        }
+    }
+
+    private fun AnimeData.addToBookmark() {
+        viewModel.bookmarkObject(this)
+        requireContext().showToast("Added as bookmark")
+    }
+
+    fun Context.showToast(message: String, isLongToast: Boolean = false) {
+        val duration = if (isLongToast) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
+        Toast.makeText(this, message, duration).show()
     }
 
     private fun AnimeData.setYoutubePlayer() =

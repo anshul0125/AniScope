@@ -1,5 +1,8 @@
 package com.example.aniscope.model
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
@@ -10,7 +13,9 @@ data class AnimeListResponse(
     val pagination: Pagination? = null
 ): Serializable
 
+@Entity(tableName = "anime")
 data class AnimeData(
+    @PrimaryKey @ColumnInfo(name = "id")
     @SerializedName("mal_id")
     val id: Int? = null,
     @SerializedName("background")

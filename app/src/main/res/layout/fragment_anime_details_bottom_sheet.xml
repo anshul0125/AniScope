@@ -11,6 +11,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,7 +43,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="end|top"
                     android:layout_margin="10dp"
-                    android:src="@drawable/ic_close_black"/>
+                    android:src="@drawable/ic_close_black" />
 
             </FrameLayout>
 
@@ -61,7 +62,7 @@
                     android:textSize="24sp"
                     tools:text="Sousou no Frieren" />
 
-                <androidx.appcompat.widget.LinearLayoutCompat
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -76,6 +77,9 @@
                         android:paddingTop="3dp"
                         android:textColor="@color/color_green"
                         android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         tools:text="9.2 " />
 
                     <androidx.appcompat.widget.AppCompatImageView
@@ -84,7 +88,10 @@
                         android:layout_height="15dp"
                         android:layout_marginStart="8dp"
                         android:background="@drawable/ic_arrow_right"
-                        android:backgroundTint="@color/color_green" />
+                        android:backgroundTint="@color/color_green"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvRating"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvYear"
@@ -96,9 +103,22 @@
                         android:paddingTop="3dp"
                         android:textColor="@color/white"
                         android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/ivArrow"
+                        app:layout_constraintTop_toTopOf="parent"
                         tools:text="2022" />
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivBookmark"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="end"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@drawable/ic_bookmark_unfilled" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvEpisodes"
@@ -167,7 +187,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/poppins_bold"
-                    android:text="More Like This -"
+                    android:text="@string/more_like_this"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 

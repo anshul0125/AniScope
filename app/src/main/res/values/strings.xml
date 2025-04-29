@@ -10,4 +10,5 @@
     <string name="rated_with_collon">"Rated: "</string>
     <string name="episodes_with_collon">Episodes: %1$s</string>
     <string name="producers_with_colon">"Producers: "</string>
+    <string name="more_like_this">More Like This -</string>
 </resources>
