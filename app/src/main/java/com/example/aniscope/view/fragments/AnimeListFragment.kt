@@ -64,7 +64,10 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
             layoutManager = binding.rvAnime.layoutManager as LinearLayoutManager,
             pageSize = 2
         ) {
-            override fun loadMoreItems() = getAnimeList()
+            override fun loadMoreItems() {
+                binding.swipeToRefresh.isRefreshing = true
+                getAnimeList()
+            }
             override val isLastPage = viewModel.isLastPage
             override val isLoading = viewModel.isLoading
         }
@@ -72,20 +75,18 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
 
     private fun initUi() {
         binding.rvAnime.adapter = AnimeListAdapter(this)
-        if(!showFavorites) paginationListener?.let {
-            binding.rvAnime.addOnScrollListener(it)
-        }
         binding.swipeToRefresh.setOnRefreshListener{
             viewModel.pageId = 1
             animeList.clear()
             getAnimeList()
         }
-        if(!showFavorites) {
-            getAnimeList()
-            observer()
-        } else {
+        if (showFavorites) {
             getBookmarkList()
             binding.swipeToRefresh.isEnabled = false
+        } else {
+            observer()
+            getAnimeList()
+            paginationListener?.let { binding.rvAnime.addOnScrollListener(it) }
         }
     }
 
@@ -96,7 +97,6 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
             updateAnimeList(updatedList = bookmarkList)
         }
     }
-
 
     private fun observer() {
         sharedViewModel.animeList.observe(viewLifecycleOwner) {
@@ -112,8 +112,9 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
     }
 
     private fun getAnimeList() {
-        viewModel.getAnimeList(viewModel.pageId++).observe(viewLifecycleOwner) {
+        viewModel.getAnimeList(viewModel.pageId).observe(viewLifecycleOwner) {
             if (it.isSuccessful && it.body() != null && it.code() == 200) {
+                viewModel.pageId++
                 viewModel.isLoading = false
                 viewModel.isLastPage = it.body()?.pagination == null || it.body()?.pagination?.hasNextPage == false
                 binding.swipeToRefresh.isRefreshing = false

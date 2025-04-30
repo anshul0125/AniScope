@@ -50,13 +50,6 @@ class AnimeActivity : AppCompatActivity() {
     }
 
     private fun initUi() {
-//        binding.tvBookmark.setOnClickListener{
-//            sharedViewModel.showBookmarkList.value?.let {
-//                sharedViewModel.showBookmarkList(!it)
-//            } ?: kotlin.run {
-//                sharedViewModel.showBookmarkList(true)
-//            }
-//        }
         binding.ivBackPress.setOnClickListener{
             onBackPressed()
         }
@@ -81,11 +74,11 @@ class AnimeActivity : AppCompatActivity() {
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.home_item -> {
-                    binding.tvTitle.text = "Discover Animes"
+                    binding.tvTitle.text = getString(R.string.discover_animes)
                     binding.homePageViewPager.setCurrentItem(0, true)
                 }
                 R.id.bookmark_item -> {
-                    binding.tvTitle.text = "Your Favourites"
+                    binding.tvTitle.text = getString(R.string.your_favourites)
                     binding.homePageViewPager.setCurrentItem(1, true)
                 }
             }
@@ -94,10 +87,11 @@ class AnimeActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if(supportFragmentManager.backStackEntryCount > 1) {
-            super.onBackPressed()
+        if (binding.bottomNavigationView.selectedItemId == R.id.bookmark_item) {
+            binding.bottomNavigationView.selectedItemId = R.id.home_item
+            return
         } else {
-            finish()
+            super.onBackPressed()
         }
     }
     override fun onDestroy() {

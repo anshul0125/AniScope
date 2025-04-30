@@ -34,9 +34,10 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentAnimeDetailsBottomSheetBinding? = null
     private val binding get() = _binding!!
-    private var animeData: AnimeData? = null
-    val bookmarkList = ArrayList<AnimeData>()
+
+    private val bookmarkList = ArrayList<AnimeData>()
     private val TAG = this.javaClass.simpleName
+    private var animeData: AnimeData? = null
 
     private val sharedViewModel by lazy {
         ViewModelProvider(requireActivity())[SharedViewModel::class.java]
@@ -104,6 +105,7 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
             it.requestLayout()
             behavior.skipCollapsed = true
             behavior.isHideable = true
+            behavior.isDraggable = false
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
     }
@@ -205,15 +207,11 @@ class AnimeDetailsBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun AnimeData.deleteBookmark() {
-        id?.let { id ->
-            viewModel.deleteBookmark(id)
-            requireContext().showToast("Removed bookmark")
-        }
+        id?.let { id -> viewModel.deleteBookmark(id) }
     }
 
     private fun AnimeData.addToBookmark() {
         viewModel.bookmarkObject(this)
-        requireContext().showToast("Added as bookmark")
     }
 
     fun Context.showToast(message: String, isLongToast: Boolean = false) {

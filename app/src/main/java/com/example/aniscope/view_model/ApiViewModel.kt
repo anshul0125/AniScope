@@ -8,7 +8,6 @@ import com.example.aniscope.model.AnimeListResponse
 import com.example.aniscope.network.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
@@ -21,6 +20,7 @@ class ApiViewModel(val repository: Repository): ViewModel() {
 
     fun getAnimeList(page: Int): LiveData<Response<AnimeListResponse>> {
         return MutableLiveData<Response<AnimeListResponse>>().apply {
+            job?.cancel()
             isLoading = true
             job = viewModelScope.launch(Dispatchers.IO) {
                 postValue(repository.getAnimeList(page))
