@@ -21,19 +21,28 @@ The home screen’s where it gets good:
 - Pagination for smooth scrolling, plus pull-to-refresh.
 The list API gives lots of details already—more can come from the detail API if needed!
 
-<img src="https://media-hosting.imagekit.io/a6f31b8282db405e/anime_list.png?Expires=1838927731&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=Ei5lu3AiGcX7v~YCBlKdSKqHLpGQO2FdKOm0gtgUeldE6MdwCk9FmuwEAaPst6w26rJGGdwCXxoPJpPJelmCWLecSrLU1l7eo3Tp46PYI~DLnc-4v2Qa3JB8HDh9RyVb53dDI8Ooc2UTuiqD0QK7Kg8sq5fQHfzoEZ8y5ClakmWDdVUzEUrVipXNg7PohpjGPZu2JAy~uJhvu-DXnCo2WeEsDQdnNtku7w3sw6KjY4tqHKiIpGj60igV7biUdbj7o1k4jR77cscH5R8pRAFpbSCQIm5ZWPRt0~e5JAkDz42-ks7Pd-kEhkM81P5B3xa0Ty1Y5-~zCj~M-qpJ~qwL4w__" width="300" alt="Anime List Screen" style="display: block; margin: 0 auto;">
+<img src="https://github.com/user-attachments/assets/6a23bd4f-3dba-4d35-bc53-caf001843b20" width="300" alt="Anime List Screen" style="display: block; margin: 0 auto;">
+
 *Love those posters and easy scrolling!*
 
 ---
 
 ### 3. Anime Detail Bottom Sheet 🎥
 Tap an anime, and a slick bottom sheet pops up:
-- Plays trailers (or shows the poster if none).
+- Plays trailers (or shows the poster if none) using a YouTube player.
 - Lists title, synopsis, genres, cast, episodes, and rating.
 - Adds a “More Like These” section with random 5 picks.
+- Lets you bookmark your favorite anime right from here!
 
-<img src="https://media-hosting.imagekit.io/78572a16b1754e9f/anime_details.png?Expires=1838927839&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=LAFkXh6vVd0z7EPQ2Y2BQ1388~pbdVXghWP~S~Yq3zNWs1vj-Lfmw4RP3FvfgJ5PI4Slt4wbfvPMlfLJ8PDDAFoh1rav-4jbNYLo56keku7K~ARMVAsw79fgfZg8XkC3umivQZlHcFMSVtQK-e1-7uy5dJ~By9Mi6rTMEfunxXdjdwgY8TIxwcGEtlTOHnLrOb1JU4ImFslI52yG3DrUFClLCqVcVMoumu1PKdiVMhPIhPbFMkk8MnuFR42v7rA1Qk6nL-QU8dOF7~fu3VWsK45DVwomzvcLOL3x~hRGmPZ6t7sksH0OrimQ~tIvDLAVNN0ztvxZesJsWP3Bn3ZUVA__" width="300" alt="Detail Bottom Sheet" style="display: block; margin: 0 auto;">
+<img src="https://i.ibb.co/QFcqkp51/details-page.png" width="300" alt="Detail Bottom Sheet" style="display: block; margin: 0 auto;">
 *Check out that trailer and random suggestions!*
+
+---
+
+### 4. Favorites Section ❤️
+Check out your bookmarked anime anytime! Navigate to the Favorites tab to see a list of saved anime, making it easy to revisit your top picks.
+
+<img src="https://i.ibb.co/BHL8CjsF/favorites-page.png" width="300" alt="Favorites Screen" style="display: block; margin: 0 auto;">
 
 ---
 
@@ -50,5 +59,24 @@ Tap an anime, and a slick bottom sheet pops up:
 2. Open in Android Studio.
 3. Sync and run on an emulator or device.
 
+## 💻 Tech Stack 🛠️
+- **Language**: Kotlin
+- **Layout**: XML
+- **Database**: Room DB
+- **Networking**: Retrofit
+- **Architecture**: MVVM
+- **Navigation**: BottomNavigationView, ViewPager2
+- **List Display**: RecyclerView
+- **Detail View**: BottomSheetDialogFragment
+- **Video Playback**: YouTubePlayerView (com.pierfrancescosoffritti.androidyoutubeplayer.core)
+
 ## 🌈 Final Thoughts 💭
-AniScope was a joy to build! It’s got the basics covered with some neat extras. With more time, I’d add caching and a search bar. Let me know what you think—I’d love your feedback! 😄
+AniScope was a joy to build! It’s got the basics covered with some neat extras like bookmarking and a favorites section. With more time, I’d add caching and a search bar. Let me know what you think—I’d love your feedback! 😄
+
+---
+
+## 📝 Notes 🖋️
+- Built this as a personal project to dive into Android development and anime fandom—total fun ride!
+- Used Retrofit for API calls and Glide for image loading, with a sprinkle of Kotlin magic.
+- Images are hosted on i.ibb.co for now—might switch to a repo folder later.
+- Feel free to fork or suggest ideas—I’m always up for improving it! 😄
