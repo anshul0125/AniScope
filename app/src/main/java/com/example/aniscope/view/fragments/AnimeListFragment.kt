@@ -24,19 +24,25 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
     val binding get() = _binding!!
 
     private val bookmarkList: ArrayList<AnimeData> = ArrayList()
+    private val animeList: ArrayList<AnimeData> = ArrayList()
     private var paginationListener: PaginationListenerLinear? = null
-    private var currentAnimeList: MutableList<AnimeData> = mutableListOf()
+    private var showFavorites = false
 
     private val viewModel by lazy {
         ViewModelProvider(this, ApiViewModelFactory(Repository()))[ApiViewModel::class.java]
     }
 
     private val dbViewModel by lazy {
-        ViewModelProvider(requireActivity())[DatabaseViewModel::class.java]
+        ViewModelProvider(this)[DatabaseViewModel::class.java]
     }
 
     private val sharedViewModel by lazy {
         ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        showFavorites = arguments?.getBoolean(ARGS_SHOW_BOOKMARK) ?: false
     }
 
     override fun onCreateView(
@@ -49,17 +55,11 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initData()
         initUi()
-        observer()
-        getAnimeList()
     }
 
-    private fun initUi() {
-        binding.swipeToRefresh.setOnRefreshListener{
-            viewModel.pageId = 1
-            (binding.rvAnime.adapter as? AnimeListAdapter)?.resetList()
-            getAnimeList()
-        }
+    private fun initData() {
         paginationListener = object: PaginationListenerLinear(
             layoutManager = binding.rvAnime.layoutManager as LinearLayoutManager,
             pageSize = 2
@@ -73,50 +73,48 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
         }
     }
 
-    private fun observer() {
+    private fun initUi() {
+        binding.rvAnime.adapter = AnimeListAdapter(this)
+        binding.swipeToRefresh.setOnRefreshListener{
+            viewModel.pageId = 1
+            animeList.clear()
+            getAnimeList()
+        }
+        if (showFavorites) {
+            getBookmarkList()
+            binding.swipeToRefresh.isEnabled = false
+        } else {
+            observer()
+            getAnimeList()
+            paginationListener?.let { binding.rvAnime.addOnScrollListener(it) }
+        }
+    }
+
+    private fun getBookmarkList() {
         dbViewModel.daoObject?.getBookmarkedList()?.observe(viewLifecycleOwner) {
             bookmarkList.clear()
             bookmarkList.addAll(it)
-            if (sharedViewModel.showBookmarkList.value == true) {
-                (binding.rvAnime.adapter as? AnimeListAdapter)?.resetListAndUpdateList(bookmarkList)
-            }
+            updateAnimeList(updatedList = bookmarkList)
         }
+    }
+
+    private fun observer() {
         sharedViewModel.animeList.observe(viewLifecycleOwner) {
-            if (sharedViewModel.showBookmarkList.value == false) {
-                updateAnimeList(updatedList = it)
-            } else {
-                currentAnimeList.addAll(it)
-            }
-        }
-        sharedViewModel.showBookmarkList.observe(viewLifecycleOwner){ showBookmarkList ->
-            if(showBookmarkList) {
-                binding.swipeToRefresh.isEnabled = false
-                binding.rvAnime.clearOnScrollListeners()
-                (binding.rvAnime.adapter as? AnimeListAdapter)?.apply {
-                    currentAnimeList = list.toMutableList()
-                    resetListAndUpdateList(bookmarkList)
-                }
-            } else {
-                binding.swipeToRefresh.isEnabled = true
-                paginationListener?.let { binding.rvAnime.addOnScrollListener(it) }
-                (binding.rvAnime.adapter as? AnimeListAdapter)?.apply { resetListAndUpdateList(currentAnimeList) }
-            }
+            animeList.addAll(it)
+            updateAnimeList(updatedList = animeList)
         }
     }
 
     private fun updateAnimeList(updatedList: List<AnimeData>) {
         binding.rvAnime.visibility = View.VISIBLE
-        if(binding.rvAnime.adapter is AnimeListAdapter) {
-            (binding.rvAnime.adapter as AnimeListAdapter).updateList(newList = updatedList)
-        } else {
-            binding.rvAnime.adapter = AnimeListAdapter(list = (updatedList as? ArrayList) ?: arrayListOf(), this)
-            paginationListener?.let { binding.rvAnime.addOnScrollListener(it) }
-        }
+        binding.shimmerLayout.visibility = View.GONE
+        (binding.rvAnime.adapter as AnimeListAdapter).saveData(newList = updatedList)
     }
 
     private fun getAnimeList() {
-        viewModel.getAnimeList(viewModel.pageId++).observe(viewLifecycleOwner) {
+        viewModel.getAnimeList(viewModel.pageId).observe(viewLifecycleOwner) {
             if (it.isSuccessful && it.body() != null && it.code() == 200) {
+                viewModel.pageId++
                 viewModel.isLoading = false
                 viewModel.isLastPage = it.body()?.pagination == null || it.body()?.pagination?.hasNextPage == false
                 binding.swipeToRefresh.isRefreshing = false
@@ -141,7 +139,12 @@ class AnimeListFragment : Fragment(), AnimeListAdapter.AnimeListCallback {
     }
 
     companion object {
+        const val ARGS_SHOW_BOOKMARK = "SHOW_BOOKMARK"
         @JvmStatic
-        fun newInstance() = AnimeListFragment()
+        fun newInstance(showFavorites: Boolean) = AnimeListFragment().apply {
+            arguments = Bundle().apply {
+                putBoolean(ARGS_SHOW_BOOKMARK, showFavorites)
+            }
+        }
     }
 }

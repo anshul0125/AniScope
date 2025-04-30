@@ -6,4 +6,10 @@
     <color name="color_green">#06C149</color>
     <color name="transparent">#00000000</color>
     <color name="shimmer_background">#7E7E7E</color>
+    <color name="color_6B7280">#6B7280</color>
+    <color name="color_6C5DD3">#6C5DD3</color>
+    <color name="color_2A2D35">#2A2D35</color>
+    <color name="color_35383F">#35383F</color>
+    <color name="color_8B5CF6">#8B5CF6</color>
+    <color name="ripple_color">#806C5DD3</color>
 </resources>

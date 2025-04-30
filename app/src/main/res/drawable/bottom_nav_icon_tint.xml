@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<selector xmlns:android="http://schemas.android.com/apk/res/android">-->
+<!--    <item android:color="@color/color_6C5DD3" android:state_checked="true" />-->
+<!--    <item android:color="@color/color_6B7280" android:state_checked="false" />-->
+<!--</selector>-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/bottom_nav_icon_gradient" android:state_checked="true" />
+    <item android:color="@color/color_6B7280" android:state_checked="false" />
+</selector>
