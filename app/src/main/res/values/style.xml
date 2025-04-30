@@ -8,4 +8,23 @@
         <item name="cornerSizeBottomRight">0dp</item>
         <item name="cornerFamily">rounded</item>
     </style>
+
+    <style name="BottomNavTextActive" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:shadowColor">@color/color_1F222A</item>
+        <item name="android:layout_marginTop">40dp</item>
+        <item name="android:shadowRadius">1</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">1</item>
+    </style>
+
+    <style name="BottomNavTextInactive" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_marginTop">40dp</item>
+        <item name="android:textColor">@color/color_6B7280</item>
+    </style>
 </resources>

@@ -32,9 +32,9 @@
             android:layout_marginHorizontal="10dp"
             android:fontFamily="@font/poppins_semibold"
             android:gravity="start|center_vertical"
-            android:text="Anime List"
+            android:text="@string/discover_animes"
             android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tvBookmark"
             app:layout_constraintStart_toEndOf="@id/ivBackPress"
@@ -50,7 +50,7 @@
             android:text="@string/saved_animes"
             android:textColor="@color/white"
             android:textSize="14sp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:paddingHorizontal="18dp"
             android:paddingVertical="8dp"
             android:background="@drawable/bg_curved_stroke"
@@ -61,11 +61,34 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/homePageViewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_above="@id/bottomNavigationView"
+        android:layout_marginBottom="1dp"
+        android:scrollIndicators="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/clToolbar" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="68dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bottom_nav_background"
+        android:elevation="8dp"
+        app:itemBackground="@drawable/bottom_nav_item_background"
+        app:itemIconSize="26dp"
+        app:itemTextAppearanceActive="@style/BottomNavTextActive"
+        app:itemTextAppearanceInactive="@style/BottomNavTextInactive"
+        app:itemTextColor="@color/white"
+        app:itemPaddingBottom="8dp"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+<!--    app:itemIconTint="@drawable/bottom_nav_icon_tint"-->
+<!--    app:itemRippleColor="@drawable/bottom_nav_ripple"-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

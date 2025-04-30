@@ -1,26 +1,28 @@
 package com.example.aniscope.view
 
-import android.annotation.SuppressLint
-import android.content.res.ColorStateList
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.aniscope.R
 import com.example.aniscope.databinding.ActivityAnimeListBinding
-import com.example.aniscope.view.adapter.AnimeListAdapter
-import com.example.aniscope.view.fragments.AnimeListFragment
+import com.example.aniscope.model.AnimeData
+import com.example.aniscope.view_model.DatabaseViewModel
 import com.example.aniscope.view_model.SharedViewModel
-import kotlin.jvm.internal.Intrinsics.Kotlin
 
 class AnimeActivity : AppCompatActivity() {
 
     var _binding: ActivityAnimeListBinding? = null
     val binding get() = _binding!!
 
+    private val bookmarkList: ArrayList<AnimeData> = ArrayList()
+
     private val sharedViewModel by lazy {
         ViewModelProvider(this)[SharedViewModel::class.java]
+    }
+
+    private val viewModel by lazy {
+        ViewModelProvider(this)[DatabaseViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,63 +31,66 @@ class AnimeActivity : AppCompatActivity() {
         setContentView(binding.root)
         initUi()
         observer()
-        setAnimeFragment()
     }
 
     private fun observer() {
-        sharedViewModel.showBookmarkList.observe(this){ showBookmarkList ->
-            updateBookmarkUiStatus(showBookmarkList)
+        viewModel.daoObject?.getBookmarkedList()?.observe(this){
+            bookmarkList.clear()
+            bookmarkList.addAll(it)
+            setBookmarkCount(count = it.size)
         }
     }
 
-    @SuppressLint("UseCompatTextViewDrawableApis")
-    private fun updateBookmarkUiStatus(showBookmarkList: Boolean) {
-        binding.tvBookmark.apply {
-            if(showBookmarkList) {
-                backgroundTintList = ColorStateList.valueOf(
-                    ContextCompat.getColor(this@AnimeActivity, R.color.white)
-                )
-                setTextColor(
-                    ColorStateList.valueOf(
-                        ContextCompat.getColor(this@AnimeActivity, R.color.color_1F222A)
-                    )
-                )
-                compoundDrawableTintList = ColorStateList.valueOf(
-                    ContextCompat.getColor(this@AnimeActivity, R.color.color_1F222A)
-                )
-            } else {
-                backgroundTintList = null
-                background = ContextCompat.getDrawable(this@AnimeActivity, R.drawable.bg_curved_stroke)
-                setTextColor(
-                    ColorStateList.valueOf(
-                        ContextCompat.getColor(this@AnimeActivity, R.color.white)
-                    )
-                )
-                compoundDrawableTintList = ColorStateList.valueOf(
-                    ContextCompat.getColor(this@AnimeActivity, R.color.white)
-                )
-            }
+    private fun setBookmarkCount(count: Int) {
+        binding.bottomNavigationView.getOrCreateBadge(R.id.bookmark_item).apply {
+            number = count
+            backgroundColor = ContextCompat.getColor(this@AnimeActivity, R.color.color_6C5DD3)
+            badgeTextColor = ContextCompat.getColor(this@AnimeActivity, R.color.white)
         }
     }
 
     private fun initUi() {
-        binding.tvBookmark.setOnClickListener{
-            sharedViewModel.showBookmarkList.value?.let {
-                sharedViewModel.showBookmarkList(!it)
-            } ?: kotlin.run {
-                sharedViewModel.showBookmarkList(true)
-            }
-        }
+//        binding.tvBookmark.setOnClickListener{
+//            sharedViewModel.showBookmarkList.value?.let {
+//                sharedViewModel.showBookmarkList(!it)
+//            } ?: kotlin.run {
+//                sharedViewModel.showBookmarkList(true)
+//            }
+//        }
         binding.ivBackPress.setOnClickListener{
             onBackPressed()
         }
+        setBottomNavigation()
+        setHomepageViewPager()
     }
 
-    private fun setAnimeFragment() {
-        supportFragmentManager.beginTransaction()
-            .add(binding.fragmentContainer.id, AnimeListFragment.newInstance(), AnimeListFragment::class.java.simpleName)
-            .addToBackStack(AnimeListFragment::class.java.simpleName)
-            .commit()
+    private fun setHomepageViewPager() {
+        binding.homePageViewPager.setOffscreenPageLimit(1)
+        binding.homePageViewPager.setUserInputEnabled(false)
+        binding.homePageViewPager.setPageTransformer(null)
+        binding.homePageViewPager.adapter = HomePageViewPagerAdapter(
+            bottomTabItems = listOf(R.id.home_item, R.id.bookmark_item),
+            fm = supportFragmentManager,
+            lifecycle = lifecycle,
+        )
+    }
+
+    private fun setBottomNavigation() {
+        binding.bottomNavigationView.menu.clear()
+        binding.bottomNavigationView.inflateMenu(R.menu.menu_home)
+        binding.bottomNavigationView.setOnItemSelectedListener { item ->
+            when(item.itemId) {
+                R.id.home_item -> {
+                    binding.tvTitle.text = "Discover Animes"
+                    binding.homePageViewPager.setCurrentItem(0, true)
+                }
+                R.id.bookmark_item -> {
+                    binding.tvTitle.text = "Your Favourites"
+                    binding.homePageViewPager.setCurrentItem(1, true)
+                }
+            }
+            return@setOnItemSelectedListener true
+        }
     }
 
     override fun onBackPressed() {
